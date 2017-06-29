@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}<title>Add service</title>{% endblock %}
+{% block content %}
+<h3>Add service</h3>
+	<hr>
+	<form method="POST" class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="service_name">service name:</label>
+    <div class="controls">
+     {{ form.service_name }}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="service_script">service script:</label>
+    <div class="controls">
+     {{ form.service_script }}
+    </div>
+  </div>
+    <div class="control-group">
+    <label class="control-label" for="service_log">service log:</label>
+    <div class="controls">
+     {{ form.service_log }}
+    </div>
+  </div>
+    <div class="control-group">
+    <label class="control-label" for="service_host">service by Host:</label>
+    <div class="controls">
+	{{ form.host }}
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn" >Add service</button>
+    </div>
+  </div>
+</form>
+<span class="label label-success">{{result}}</span>
+{% endblock %}

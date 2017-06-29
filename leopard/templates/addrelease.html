@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}<title>网上课堂迭代管理</title>{% endblock %}
+{% block content %}
+<h3>上传文件</h3>
+	<hr>
+	<form method="POST" class="form-horizontal" enctype="multipart/form-data">
+  <div class="control-group">
+    <label class="control-label" for="upload_file">选择文件:</label>
+    <div class="controls">
+      {{ form.upload_file }}{{form.upload_file.errors}}
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="description">原因:</label>
+    <div class="controls">
+      {{ form.add_reason }}{{form.add_reason.errors}}
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn" >上传</button>
+    </div>
+  </div>
+</form>
+<span class="label label-success">{{result}}</span>
+{% endblock %}

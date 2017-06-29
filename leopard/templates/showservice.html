@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}<title>services list</title>{% endblock %}
+{% block content %}
+<div>
+	<a href="/addservice"><span class="label label-warning">Add Service</span></a>&nbsp;&nbsp;
+<div class="pull-right">
+	<form class="form-search" method="POST">
+	<input type="text" name ="search" class="input-medium search-query" placeholder="Search">
+	<button type="submit" class="btn">Search</button>&nbsp;&nbsp;
+	</form>
+</div>
+</div>
+	<hr>
+      <table class="table table-bordered table-striped table-condensed">
+		<thead>
+			<tr>
+			<th width="150">Service Name</th>
+			<th>service script</th>
+			<th>service log</th>
+            <th width="100">by Host</th>
+			<th width="250">Operation</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for service in service_list %}
+			<tr>
+			<td><a href="#" title="Edit Service">{{service.service_name}}</a></td>
+			<td>{{service.service_script}}</td>
+			<td>{{service.service_log}}</td>
+            <td>{{service.host}}</td>
+			<td>
+				<div class="btn-group">
+					<a class="btn" href="#" title="start Service" onclick="run_script({{service.id}},'start','run')">start</a>
+					<a class="btn" href="#" title="stop Service" onclick="run_script({{service.id}},'stop','run')">stop</a>
+                    <a class="btn" href="#" title="restart Service" onclick="run_script({{service.id}},'restart','run')">restart</a>
+                    <a class="btn" href="#" title="log" onclick="cat_log({{ service.id }},'log')">log</a>
+                    <a class="btn" href="#" title="del" onclick="del_service({{ service.id }},'del')" >del</a>
+				</div>
+			</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	  </table>
+<DIV style="background-color:#000000; color:#20AC00; border-width:px; cursor:default; width:1150px; height:500px; overflow: auto; display:none; " id="script_result">
+
+</DIV>
+{% endblock %}
