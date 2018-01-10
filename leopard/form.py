@@ -4,7 +4,7 @@ from leopard.models import *
 from django import forms
 from django.contrib.auth.models import User 
 
-
+'''
 class hostform(ModelForm):
     host_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Host Name"}))
     host_user = forms.CharField(widget=forms.TextInput(attrs={"class":"input-medium","placeholder":"login user"}))
@@ -75,3 +75,4 @@ class releasesform(ModelForm):
 
 if __name__ == "__main__":
     pass
+'''

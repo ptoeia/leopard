@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 #多个svn对应一个host，外键应该在svn表里面
-
+'''
        
 class hosts(models.Model):
     host_name = models.CharField(max_length=30)
@@ -29,7 +29,7 @@ class svns(models.Model):
     svn_pass = models.CharField(max_length=30)
     svn_local = models.CharField(max_length=100)
     svn_path = models.CharField(max_length=100)
-    host  = models.ForeignKey(hosts)
+    #host  = models.ForeignKey(hosts,on_delete=models.SET_NULL())
     create_user = models.CharField(max_length=10)
     def __unicode__(self):
         return self.svn_name
@@ -63,8 +63,8 @@ class scriptgroup(models.Model):
 
 class tasks(models.Model):
     task_name = models.CharField(max_length=50)
-    script_group = models.ForeignKey(scriptgroup)
-    host_group = models.ForeignKey(hostgroup)
+    #script_group = models.ForeignKey(scriptgroup)
+    #host_group = models.ForeignKey(hostgroup)
     task_date = models.CharField(max_length=50)
     task_status = models.CharField(max_length=10)
     task_create_user = models.CharField(max_length=30)
@@ -97,3 +97,4 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField(u"姓名",max_length=30)
     iphone = models.CharField(u'手机',max_length=11)
+'''

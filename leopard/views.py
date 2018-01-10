@@ -5,19 +5,22 @@ from django.db import models
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.forms.models import model_to_dict
-from form import *
-from leopard.models import hosts,svns,hostgroup,scripts,tasks,scriptgroup,UserProfile
-import os,paramiko,time,string
+from leopard.form import *
+#from leopard.models import hosts,svns,hostgroup,scripts,tasks,scriptgroup,UserProfile
+#import os,paramiko,time,string
 from leopardproject import settings
 from django.contrib.auth.models import User  
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.contrib.auth.decorators import login_required
-from function import *
+#from function import *
 
 import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
 
+def index(request):
+    return render_to_response('task.html')
+'''
 def login(request):
     if request.method == 'POST':  
             username = request.POST['username']  
@@ -717,7 +720,7 @@ def showrelease(request):
     else:
         release_list = releases.objects.all()
         return render(request,'showrelease.html',{'release_list':release_list})
-
+'''
 #from django.contrib.auth.models import User;
 #user = User.objects.create_user(username='updatesvn',password='updatesvn123',email='a@a.com')
 #user.save

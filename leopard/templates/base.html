@@ -23,15 +23,15 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">运维管理平台</a>
+          <a class="brand" href="#">运维平台</a>
 		  <div class="nav-collapse collapse">
 		  <ul class="nav pull-right">
 			<li class="dropdown"> 
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {{user.username}} <b class="caret"></b></a> 
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i>  <b class="caret"></b></a>
 			<ul class="dropdown-menu"> 
-			<li><a href="{% url 'useredit' user.id %}"><i class="icon-user"></i> 个人资料</a></li>
+			<li><a href="#"><i class="icon-user"></i> 个人资料</a></li>
 			<li class="divider"></li> 
-			<li><a href="{% url 'logout' %}"><i class="icon-off"></i> 注销</a></li> </ul> </li>
+			<li><a href="#"><i class="icon-off"></i> 注销</a></li> </ul> </li>
 		  </ul>
 		  </div>
         </div>
@@ -42,16 +42,15 @@
   <div class="row-fluid">
     <div class="span2">
       <ul class="nav nav-tabs nav-stacked">
-        {% if user.username == 'root' %}
+
 		<li><a href="/"><i class="icon-th-list"></i> Server</a></li>
-		<li><a href="{% url 'showsvn' %}"><i class="icon-th"></i> Svn</a></li>
-        <li><a href="{% url 'showservice' %}"><i class="icon-th"></i> Services</a></li>
-		<li><a href="{% url 'group' %}"><i class="icon-lock"></i> Group</a></li>
-		<li><a href="{% url 'task' %}"><i class="icon-lock"></i> Task</a></li>
-		<li><a href="{% url 'showscript' %}"><i class="icon-lock"></i> Script</a></li>
-		<li><a href="{% url 'showuser' %}"><i class="icon-lock"></i> User</a></li>
-        <li><a href="{% url 'showrelease' %}"><i class="icon-lock"></i> 网上课堂迭代管理</a></li>
-        {% endif %}
+		<li><a href="#"><i class="icon-th"></i> Svn</a></li>
+        <li><a href="#"><i class="icon-th"></i> Services</a></li>
+		<li><a href="#"><i class="icon-lock"></i> Group</a></li>
+		<li><a href="#"><i class="icon-lock"></i> Task</a></li>
+		<li><a href="#"><i class="icon-lock"></i> Script</a></li>
+		<li><a href="#"><i class="icon-lock"></i> User</a></li>
+
 	  </ul>
     </div>
     <div class="box span10">
