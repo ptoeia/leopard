@@ -20,6 +20,11 @@ import sys
 
 def index(request):
     return render_to_response('task.html')
+
+def alarm_add(request):
+    if request.method == 'GET':
+	    alarm_add_form = alarm_form()
+    return render_to_response('alarm_add.html',{'alarm_add_form':alarm_add_form}) 
 '''
 def login(request):
     if request.method == 'POST':  

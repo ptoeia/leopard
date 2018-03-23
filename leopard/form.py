@@ -4,6 +4,17 @@ from leopard.models import *
 from django import forms
 from django.contrib.auth.models import User 
 
+alarm_type_choice = [
+    ('ec2','ec2'),
+    ('elb','elb'),
+    ('rds','rds'),
+    ('redis','redis')
+    ]
+
+class alarm_form(forms.Form):
+    id = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"instacne id"}))
+    alarm_type = forms.ChoiceField(choices=alarm_type_choice,label='alarm type')
+     
 '''
 class hostform(ModelForm):
     host_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Host Name"}))

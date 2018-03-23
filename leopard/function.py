@@ -4,6 +4,7 @@ import threading
 from leopardproject import settings
 import random
 import base64
+import boto3
 
 def ordinary_ssh(host,username,password,port,cmd):
     password = de_str(settings.SECRET_KEY,str(password))

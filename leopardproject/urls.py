@@ -1,5 +1,5 @@
 from django.conf.urls import  include, url
-from leopard.views import index
+from leopard.views import * 
 from django.contrib import admin
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -18,5 +18,6 @@ urlpatterns = [
     #url(r'^loginout/$', 'loginout',name='logout'),
 
     url(r'^$', index),
+    url(r'^alarm_add',alarm_add),
 
 ]

@@ -24,7 +24,7 @@ MANAGERS = ADMINS
 '''
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','34.215.189.24']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -122,7 +122,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            r'D:\projects\leopard\leopard\templates'
+            r'/home/ubuntu/leopard/leopard/templates'
         ],
     }
 ]

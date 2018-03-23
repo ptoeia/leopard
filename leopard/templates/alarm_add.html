@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}<title>Add AWS Alarm</title>{% endblock %}
+{% block content %}
+<h4>Add Alarm</h4>
+	<hr>
+<div>
+<form method='POST'>
+  {% csrf_token %}
+  {{alarm_add_form}}
+ <input type="button" >
+ </form>  
+</div>
+{% endblock %}
