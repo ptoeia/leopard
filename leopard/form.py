@@ -12,7 +12,7 @@ alarm_type_choice = [
     ]
 
 class alarm_form(forms.Form):
-    id = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"instacne id"}))
+    identifier = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"instacne id or rds_name"}))
     alarm_type = forms.ChoiceField(choices=alarm_type_choice,label='alarm type')
      
 '''

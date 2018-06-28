@@ -8,7 +8,10 @@ from django.forms.models import model_to_dict
 from leopard.form import *
 #from leopard.models import hosts,svns,hostgroup,scripts,tasks,scriptgroup,UserProfile
 #import os,paramiko,time,string
+from django.shortcuts import render, render_to_response, Http404, get_object_or_404, RequestContext
 from leopardproject import settings
+from cloudwatch.ec2_alarm_add import ec2_alarm
+from cloudwatch.rds_alarm_add import rds_alarm
 from django.contrib.auth.models import User  
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.contrib.auth.decorators import login_required
@@ -22,9 +25,26 @@ def index(request):
     return render_to_response('task.html')
 
 def alarm_add(request):
-    if request.method == 'GET':
-	    alarm_add_form = alarm_form()
-    return render_to_response('alarm_add.html',{'alarm_add_form':alarm_add_form}) 
+    if request.method == 'POST':
+        form = alarm_form(request.POST)
+        if form.is_valid():
+            selected_alarm_type = request.POST['alarm_type']
+            identifier = request.POST['identifier']
+            if selected_alarm_type == 'ec2':
+                alarm = ec2_alarm(identifier)
+                try:
+                    alarm.create_alarms()
+                    return HttpResponse('ok')
+                except Exception, e:
+                    return HttpResponse('e') 
+            if selected_alarm_type == 'rds':
+                try:
+                    rds_alarm(identifier)
+                    return HttpResponse('ok')
+                except Exception, e:
+                   return HttpResponse('e') 
+    form = alarm_form()
+    return render_to_response('alarm_add.html',{'alarm_add_form':form}) 
 '''
 def login(request):
     if request.method == 'POST':  
@@ -85,101 +105,6 @@ def index(request):
             host = paginator.page(paginator.num_pages)
         host_group = hostgroup.objects.all()
         return render(request,'showhost.html',{'hosts':host,'hostgroups':host_group})
-
-@login_required(login_url='/login/')
-def hostadd(request):
-    if request.method == 'POST':
-        form = hostform(request.POST)
-        if form.is_valid():
-            host_name = form.cleaned_data['host_name']
-            host_user = form.cleaned_data['host_user']
-            host_pass = en_str(settings.SECRET_KEY,str(form.cleaned_data['host_pass']))
-            host_w_ip = form.cleaned_data['host_w_ip']
-            host_w_port = form.cleaned_data['host_w_port']
-            host_n_ip = form.cleaned_data['host_n_ip']
-            host_n_port = form.cleaned_data['host_n_port']
-            host_root_pwd = en_str(settings.SECRET_KEY,str(form.cleaned_data['host_root_pwd']))
-            script_dir = form.cleaned_data['script_dir']
-            host_description = form.cleaned_data['host_description']
-            try:
-                hosts(host_name=host_name,host_user=host_user,host_pass=host_pass,host_w_ip=host_w_ip,host_w_port=host_w_port,host_n_ip=host_n_ip,host_n_port=host_n_port,host_root_pwd=host_root_pwd,script_dir=script_dir,host_description=host_description,create_user=request.user).save()
-                result = "Add Server %s success!"%host_name
-            except:
-                result = "Add Server %s Failed!"%host_name
-                form = hostform()
-                return render(request,'addhost.html',{'form':form,'result':result})
-            #return render_to_response('addhost.html',{'form':form,'result':result})
-            return HttpResponseRedirect('/hostadd')
-    else:
-        form = hostform()
-    return render(request,'addhost.html',{'form':form})
-
-@login_required(login_url='/login/')
-def hostedit(request,host_id):
-    host = hosts.objects.get(id=host_id)
-    if request.user.username != host.create_user and request.user.username != "root":
-        return HttpResponse("你木有权限编辑本条记录！")
-    if request.method == 'POST':
-        form = hostform(request.POST)
-        if form.is_valid():
-            try:
-                host = hosts.objects.get(id=host_id)
-                host.host_name = form.cleaned_data['host_name']
-                host.host_user = form.cleaned_data['host_user']
-                host.host_pass = en_str(settings.SECRET_KEY,str(form.cleaned_data['host_pass']))
-                host.host_w_ip = form.cleaned_data['host_w_ip']
-                host.host_w_port = form.cleaned_data['host_w_port']
-                host.host_n_ip = form.cleaned_data['host_n_ip']
-                host.host_n_port = form.cleaned_data['host_n_port']
-                host.host_root_pwd = en_str(settings.SECRET_KEY,str(form.cleaned_data['host_root_pwd']))
-                host.script_dir = form.cleaned_data['script_dir']
-                host.host_description = form.cleaned_data['host_description']
-                host.create_user = request.user
-                host.save()
-            except:
-                return HttpResponse("更新服务器信息失败!")
-            return HttpResponseRedirect('/')
-        else:
-            return HttpResponse("服务器信息不完整！")
-            
-    else:
-        try:
-            host = hosts.objects.get(id=host_id)
-        except:
-            return HttpResponse("服务器信息不存在！")
-        form=hostform(model_to_dict(host))
-        return render(request,'edithost.html',{'form':form})
-    
-@login_required(login_url='/login/')
-def showsvn(request):
-    if request.method == "POST":
-        search = request.POST.get("search",'null')
-        qset = (
-            Q(svn_name__icontains = search) | 
-            Q(svn_user__icontains = search) | 
-            Q(svn_local__icontains = search) | 
-            Q(svn_path__icontains = search) )
-        svn_list = svns.objects.filter(qset)
-        paginator = Paginator(svn_list, 10)
-        page = 1
-        try:
-            svn = paginator.page(page)
-        except PageNotAnInteger:
-            svn = paginator.page(1)
-        except EmptyPage:
-            svn = paginator.page(paginator.num_pages)
-        return render(request,'showsvn.html',{'svns':svn})        
-    else:
-        svn_list = svns.objects.all()
-        paginator = Paginator(svn_list, 10)
-        page = request.GET.get('page')
-        try:
-            svn = paginator.page(page)
-        except PageNotAnInteger:
-            svn = paginator.page(1)
-        except EmptyPage:
-            svn = paginator.page(paginator.num_pages)
-        return render(request,'showsvn.html',{'svns':svn})
 
 @login_required(login_url='/login/')
 def svnadd(request):
@@ -697,34 +622,6 @@ def addrelease(request):
         form = releasesform()
     return render(request,'addrelease.html',{'form':form})
 
-@login_required(login_url='/login/')
-def showrelease(request):
-    if request.method == 'POST':
-        id = request.POST['id']
-        num = request.POST['num']
-        release = releases.objects.get(id=id)
-        cur_time = time.strftime('%Y-%m-%d %H:%M')
-        if num == '3':
-            release.start_test_time = cur_time
-            release.test_status = '4'
-            release.save()
-            data = '开始测试成功！'
-        if num == '1':
-            release.end_test_time = cur_time
-            release.test_status = '1'
-            release.save()
-            data = '状态更改成功！'
-        if num == '0':
-            release.end_test_time = cur_time
-            release.test_status = '0'
-            reason = request.POST['reason']
-            release.ststus_reason = reason
-            release.save()
-            data = '状态更改成功！'
-        return HttpResponse(data, mimetype='application/html')
-    else:
-        release_list = releases.objects.all()
-        return render(request,'showrelease.html',{'release_list':release_list})
 '''
 #from django.contrib.auth.models import User;
 #user = User.objects.create_user(username='updatesvn',password='updatesvn123',email='a@a.com')
@@ -732,4 +629,3 @@ def showrelease(request):
 #user = User.objects.get(username='root')
 #user.set_password("L8ka65##702")
 #user.save()
-
