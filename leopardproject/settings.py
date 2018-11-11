@@ -1,5 +1,11 @@
 # Django settings for leopardproject project.
 import os
+import djcelery
+#import django_celery_results
+djcelery.setup_loader()
+BROKER_URL= 'amqp://guest@localhost//'
+CELERY_RESULT_BACKEND = 'amqp://guest@localhost//'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -11,17 +17,17 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'nala',                      # Or path to database file if using sqlite3.
+        'NAME': 'natali',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '111111',                  # Not used with sqlite3.
-        'HOST': '192.168.137.152',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': 'root',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-'''
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['127.0.0.1','34.215.189.24']
@@ -93,6 +99,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
+     'django.contrib.auth.context_processors.auth'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -122,8 +129,21 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            r'/home/ubuntu/leopard/leopard/templates'
+            r'/home/ubuntu/leopard/leopard/templates',
+            r'/usr/local/lib/python2.7/dist-packages/django/contrib/admin/templates'
         ],
+       'OPTIONS': {
+          'context_processors': [
+          'django.template.context_processors.debug',
+          'django.template.context_processors.i18n',
+          'django.template.context_processors.media',
+          'django.template.context_processors.static',
+           'django.template.context_processors.tz',
+           'django.contrib.messages.context_processors.messages',
+           'django.template.context_processors.request',
+           'django.contrib.auth.context_processors.auth',
+           ],
+       },
     }
 ]
 
@@ -135,10 +155,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    #'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     #'django.contrib.admindocs',
     'leopard',
+    'djcelery'
+    #'django_celery_results'
 )
 
 # A sample logging configuration. The only tangible logging

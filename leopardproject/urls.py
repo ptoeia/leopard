@@ -19,5 +19,8 @@ urlpatterns = [
 
     url(r'^$', index),
     url(r'^alarm_add',alarm_add),
-
-]
+    url(r'^data_sync',data_sync),
+    url(r'^count',count),
+    url(r'^dashboard',link),
+    url(r'^admin/', admin.site.urls),
+	]

@@ -16,9 +16,9 @@ def get_instance_name(instance_id):
     ec2 = boto3.resource('ec2')
     instance = ec2.Instance(instance_id)
     instance_name = ''
-    for each in instance.tags:
-        if each['Key'] == 'Name':
-            instance_name = each['Value']
+    for tag in instance.tags:
+        if tag['Key'] == 'Name':
+            instance_name = tag['Value']
             break
     if not instance_name:
         print "No Name set,please set instance_name first"

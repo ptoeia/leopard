@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}<title></title>{% endblock %}
+{% block content %}
+
+<h4>资源统计</h4>
+    <hr>
+    <div>
+        <form method='POST'>
+            {% csrf_token %}
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary" >update</button>
+                </div>
+            </div>
+        </form>  
+       <img src='static/img/ec_count.png' height="800" width="1200">
+    </div>
+{% endblock %}

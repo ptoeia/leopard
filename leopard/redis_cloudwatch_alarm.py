@@ -4,7 +4,7 @@
 import sys
 import boto3
 
-client = boto3.client('cloudwatch','ap-south-1')
+client = boto3.client('cloudwatch')
 
 # 实例的内存、带宽大小
 redis_hardware_info = { 
@@ -28,9 +28,6 @@ redis_hardware_info = {
          ],
     'cache.m4.2xlarge' :[
          {'memory': 30, 'network': 1}
-         ],
-    'cache.t2.medium' :[
-         {'memory': 3, 'network': 0.5}
          ]
 }
 
@@ -42,7 +39,7 @@ def _get_hardware_size(CacheClusterd):
       最大带宽
       最大内存
     '''  
-    client = boto3.client('elasticache','ap-south-1')
+    client = boto3.client('elasticache')
     response = client.describe_cache_clusters(
         CacheClusterId=CacheClusterd
     )
@@ -120,11 +117,11 @@ def create_memory_alarm(CacheClusterd, CacheNodeId='0001'):
        ComparisonOperator = 'LessThanThreshold'
        )
 
-def create_cpu_alarm(CacheClusterId,CacheNodeId='0001'): 
+def create_cpu_alarm(CacheCluterId,CacheNodeId='0001'): 
     ACTION_SNS_TOPIC = 'arn:aws:sns:us-west-2:660338696248:CloudWatchAlarm'
     PERIOD_IN_SECONDS = 300
     client.put_metric_alarm(
-        AlarmName = 'Redis-{}-High-cpu'.format(CacheClusterId),
+        AlarmName = 'Redis-{}-High-cpu'.format(CacheCluterId),
         AlarmDescription = 'cpu util more than 80%',
         ActionsEnabled = True,
         #OKActions = [ ACTION_SNS_TOPIC,],
@@ -135,7 +132,7 @@ def create_cpu_alarm(CacheClusterId,CacheNodeId='0001'):
         Dimensions = [
             {
                 "Name": "CacheClusterId", 
-                "Value": CacheClusterId
+                "Value": CacheCluterId
             }, 
             {
                 "Name": "CacheNodeId", 
@@ -181,11 +178,10 @@ def create_swap_alarm(CacheClusterId, CacheNodeId='0001'):
 
 def main(CacheClusterId):    
     try:
-        create_networkout_alarm(CacheClusterId)
-        create_memory_alarm(CacheClusterId)
-        create_cpu_alarm(CacheClusterId) 
-        create_swap_alarm(CacheClusterId) 
+        create_networkout_alarm(CacheCluterId)
+        create_memory_alarm(CacheCluterId)
+        create_cpu_alarm(CacheCluterId) 
+        create_swap_alarm(CacheCluterId) 
         print "add alarm success"
     except Exception,e:
         print(e)
-main('distribute-lock')

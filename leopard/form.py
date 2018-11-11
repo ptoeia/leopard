@@ -8,82 +8,18 @@ alarm_type_choice = [
     ('ec2','ec2'),
     ('elb','elb'),
     ('rds','rds'),
-    ('redis','redis')
+    #('redis','redis')
     ]
 
 class alarm_form(forms.Form):
-    identifier = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"instacne id or rds_name"}))
+    identifier = forms.CharField(required=True,widget=forms.TextInput(attrs={"placeholder":"instacne id or rds_name"}),error_messages={'required': u'必填'},)
     alarm_type = forms.ChoiceField(choices=alarm_type_choice,label='alarm type')
-     
-'''
-class hostform(ModelForm):
-    host_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Host Name"}))
-    host_user = forms.CharField(widget=forms.TextInput(attrs={"class":"input-medium","placeholder":"login user"}))
-    host_w_ip = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Inter ip"}))
-    host_w_port = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Inter port","class":"input-mini"}))
-    host_n_ip = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"local ip"}))
-    host_n_port = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"local port","class":"input-mini"}))
-    script_dir = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Example:  /bin/leopard/"}))
-    host_description = forms.CharField(widget=forms.Textarea(attrs={"class":"input-xlarge","placeholder":"Server Description","rows":3}))
-    host_pass = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"login pass","class":"input-medium"}))
-    host_root_pwd = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"root pass","class":"input-medium"}))
-    class Meta:
-        model = hosts
-        fields = ('host_name','host_user','host_pass','host_w_ip','host_w_port','host_n_ip','host_n_port','host_root_pwd','script_dir','host_description')
-
-
-class svnform(ModelForm):
-    svn_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Svn Name"}))
-    svn_user = forms.CharField(widget=forms.TextInput(attrs={"class":"input-medium","placeholder":"Svn user"}))
-    svn_pass = forms.CharField(widget=forms.PasswordInput(attrs={"class":"input-medium","placeholder":"Svn pass"}))
-    svn_local = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Example:  /var/www/html"}))
-    svn_path = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Example:  svn://xx.xx.com/svnproject"}))
-    class Meta:
-        model = svns
-        fields = ('svn_name','svn_user','svn_pass','svn_local','svn_path','host')
-        
-
-
-class scriptform(ModelForm):
-    script_description = forms.CharField(widget=forms.Textarea(attrs={"class":"input-xlarge","placeholder":"Script Description","rows":3}))
-    class Meta:
-        model = scripts
-        fields = ('script_name','script_file','script_description')
-
-
-
-class hostgroupform(ModelForm):
-    class Meta:
-        model = hostgroup
-        fields = ('host_groupname','host')
-
-class scriptgroupform(ModelForm):
-    class Meta:
-        model = scriptgroup
-        fields = ('script_groupname','script')
-
-class taskform(ModelForm):
-    class Meta:
-        model = tasks
-        fields = ('task_name','script_group','host_group')
-
-class userform(ModelForm):
-    class Meta:
-        model = User
-        fields = ('username','password','email')
-
-class serviceform(ModelForm):
-    class Meta:
-        model = services
-        fields = ('host','service_name','service_script','service_log')
-
-class releasesform(ModelForm):
-    add_reason = forms.CharField(widget=forms.Textarea(attrs={"class":"input-xlarge","placeholder":"必填","rows":3}))
-    class Meta:
-        model = releases
-        fields = ('upload_file','add_reason')
-
-
-if __name__ == "__main__":
-    pass
-'''
+    region = forms.ChoiceField(choices=[
+	                                     ('ap-south-1','ap-south-1'),
+						                 ('us-west-2','us-west-2')
+					                   ],
+						               label='region')
+   
+class test_data_sync(forms.Form):
+    cache_cluster_id = forms.CharField(required=True,widget=forms.TextInput(attrs={"placeholder":"cache cluster"}),error_messages={'required': u'必填'},)
+   

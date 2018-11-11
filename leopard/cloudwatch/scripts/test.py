@@ -4,4 +4,13 @@ import boto3
 
 client = boto3.client('elbv2')
 
-tg=client.describe_targetgroup()
+class A(object):
+  name='age'
+ 
+class B(A):
+    def x(self):
+	    print A.name
+	
+c=B()
+c.x()
+print c.name
