@@ -1,0 +1,68 @@
+
+# aws rds实例的内存大小GB
+rds_hardware_info = { 
+    'db.m4.xlarge':{
+         'memory': 16 
+    },
+    'db.m4.large':{
+    	 'memory': 8 
+    },
+    'db.m4.4xlarge':{
+    	 'memory': 64 
+    },
+    'db.m5.large':{
+         'memory': 8
+    },
+    'db.m5.xlarge':{
+         'memory': 16
+    },
+    'db.m3.large':{
+	 'memory': 7.5
+    },
+    'db.r3.xlarge':{
+         'memory': 30.5
+    },
+    'db.r3.large':{
+         'memory': 15.25
+    }
+}
+
+#aws redis实例的内存、带宽大小
+redis_hardware_info = { 
+    'cache.r3.large' :{
+         'memory': 13.5, 
+	 'network': 0.5
+    },
+    'cache.m4.large':{
+    	 'memory': 6, 
+	 'network': 0.5
+    },
+    'cache.m4.xlarge':{
+         'memory': 14,
+	 'network': 1
+    },
+    'cache.m4.2xlarge':{
+	  'memory': 30,
+	  'network': 1
+    },
+    'cache.r4.large':{
+         'memory': 12.3,
+    	 'network': 10
+    },
+    'cache.r4.xlarge':{
+         'memory': 25,
+    	 'network': 10
+    },
+    'cache.m4.2xlarge':{
+         'memory': 30,
+    	 'network': 1
+    },
+    'cache.t2.medium':{
+         'memory': 3,
+	 'network': 0.5
+    },
+    'cache.r5.large':{
+         'memory': 13,
+	 'network': 10
+    }
+}
