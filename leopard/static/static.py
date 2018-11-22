@@ -14,8 +14,6 @@ import matplotlib.pyplot as plt
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.request import CommonRequest
 
-ali_yun_access_key_Id='LTAIHBRbS8QAe9ay'
-ali_yun_AccessKeySecret='xJh0vPKYhYhky66zjD4Fdz4ZSROEGM'
 
 ALIYUN_MIDWARE_REDIS_COUNT = 1
 ALIYUN_ERP_REDIS_COUNT = 11
