@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #coding: utf-8
 #Date: 2017-11-13
-#Create ec2 cpu memory disk alarm
 
 import boto3
 import sys
@@ -23,17 +22,8 @@ class AlarmBase(object):
     OKActions =  SNS_TOPIC 
     AlarmActions =  SNS_TOPIC 
     Period = PERIOD_IN_SECONDS
-    #client = boto3.client('cloudwatch')     
 
     def __init__(self, region):
         self.Actions = alarm_sns_arn_dict.get(region)
-        #self.Actions = 'abc' 
         self.client = boto3.client('cloudwatch',region)
         self.redis_client = boto3.client('elasticache',region)
-         
-    #@classmethod
-    #def region_detect(cls,region='us-west-2'):
-    #    cls.Actions = alarm_sns_arn_dict.get(region)
-    #    cls.client = boto3.client('cloudwatch',region)
-    #     
-

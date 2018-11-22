@@ -5,36 +5,20 @@
 
 import sys
 import boto3
+from alarminit import AlarmBase 
 
-US_WEST_2_TOPIC = 'arn:aws:sns:us-west-2:660338696248:CloudWatchAlarm'
-AP_SOUTH_1_TOPIC ='arn:aws:sns:ap-south-1:660338696248:WebAlarm'
 
-alarm_sns_arn_dict = {
-                      'us-west-2': US_WEST_2_TOPIC,
-                      'ap-south-1': AP_SOUTH_1_TOPIC
-                     }
-
-class ec2_alarm(object):
+class ec2_alarm(AlarmBase):
     """
     利用aws sdk 同时添加ec2的实例状态、cpu、
     内存和磁盘多个cloudwatch监控指标
     """
-    def __init__(self,
-                 instance_id,
-                 PERIOD_IN_SECONDS=300,
-                 Actions_SNS_TOPIC=US_WEST_2_TOPIC,
-                 region='us-west-2'
-                ):
-        self.Actions = Actions_SNS_TOPIC 
-        self.Period = PERIOD_IN_SECONDS
+    def __init__(self, instance_id, region):
+        super(ec2_alarm, self).__init__(region)
         self.instance_id = instance_id
-        self.region = region 
-        self.client = boto3.client('cloudwatch')
-
-    def _region_detect(self, region):
-        if region != 'us-west-2':
-            self.Actions = alarm_sns_arn_dict.get(region)
-            self.client = boto3.client('cloudwatch',region)
+        self.ec2_client = boto3.client('cloudwatch',region)
+        self.instance_name = ''
+        self.region = region
             
     def _get_instance_name(self):
         ec2 = boto3.resource('ec2',self.region)
@@ -46,9 +30,9 @@ class ec2_alarm(object):
         if not instance_name:
             print "No Name set,please set instance name first"
             sys.exit(1)
-        return instance_name
+        self.instance_name = instance_name
 
-    def instance_check_alarm(self, instance_name):
+    def instance_check_alarm(self):
         self.client.put_metric_alarm(
             Statistic = 'Maximum',
             Period = self.Period,
@@ -57,7 +41,7 @@ class ec2_alarm(object):
             AlarmActions = [ self.Actions ],
             EvaluationPeriods = 1,
             ComparisonOperator = 'GreaterThanOrEqualToThreshold',
-            AlarmName = 'EC2-{}-StatusCheckFailed'.format(instance_name),
+            AlarmName = 'EC2-{}-StatusCheckFailed'.format(self.instance_name),
             AlarmDescription = 'StatusCheckFailed',
             MetricName = 'StatusCheckFailed',
             Namespace = 'AWS/EC2', 
@@ -70,7 +54,7 @@ class ec2_alarm(object):
             Threshold = 1,
         )
 
-    def cpu_alarm(self, instance_name):
+    def cpu_alarm(self ):
         self.client.put_metric_alarm(
             Statistic = 'Average',
             Period = self.Period,
@@ -80,7 +64,7 @@ class ec2_alarm(object):
             AlarmActions = [ self.Actions ],
             EvaluationPeriods = 1,
             ComparisonOperator = 'GreaterThanThreshold',
-            AlarmName = 'EC2-{}-CPU_Utilization'.format(instance_name),
+            AlarmName = 'EC2-{}-CPU_Utilization'.format(self.instance_name),
             AlarmDescription = 'CPU utilization exceed 75%',
             MetricName = 'CPUUtilization',
             Namespace = 'AWS/EC2', 
@@ -93,9 +77,9 @@ class ec2_alarm(object):
             Threshold = 75,
         )
 
-    def mem_alarm(self, instance_name):
+    def mem_alarm(self):
         self.client.put_metric_alarm(
-            AlarmName = 'EC2-{}-Memory_Utilization'.format(instance_name),
+            AlarmName = 'EC2-{}-Memory_Utilization'.format(self.instance_name),
             AlarmDescription = 'Memory utilization exceed 90%',
             MetricName = 'MemoryUtilization',
             Namespace = 'System/Linux',
@@ -116,9 +100,9 @@ class ec2_alarm(object):
             ComparisonOperator = 'GreaterThanThreshold'
         )
     
-    def disk_alarm(self, instance_name):
+    def disk_alarm(self):
         self.client.put_metric_alarm(
-            AlarmName = 'EC2-{}-Disk_Utilization'.format(instance_name),
+            AlarmName = 'EC2-{}-Disk_Utilization'.format(self.instance_name),
             AlarmDescription = 'Disk utilization exceed 85%',
             ActionsEnabled = True,
             #OKActions = [ self.Actions, ],
@@ -151,15 +135,9 @@ class ec2_alarm(object):
             ComparisonOperator = 'GreaterThanThreshold',
         )
 
-    def create_alarms(self):
-	instance_name = self._get_instance_name()
-	try:
-            self._region_detect(self.region)     
-            self.cpu_alarm(instance_name)
-	    self.mem_alarm(instance_name)
-	    self.disk_alarm(instance_name)
-	    self.instance_check_alarm(instance_name)
-            print "Add ec2 {} alarm metrics sucessed!".format(instance_name)
-        except Exception,e:
-            print(e)
-            print("add cloudwatch alarm failed!")
+    def create_alarm_sets(self):
+	    self._get_instance_name()
+	    self.cpu_alarm()
+	    self.mem_alarm()
+	    self.disk_alarm()
+	    self.instance_check_alarm()
